@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('./partials/head') %>
+
+<body class="light-theme">
+
+  <!--
+    - #HEADER
+  -->
+
+   <%- include('./partials/header') %>
+
+
+  <main>
+    <div class="main">
+
+      <div class="container">
+
+        <!--
+          - BLOG SECTION
+        -->
+
+        <div class="blog">
+
+          <div style="display: flex;">
+            <h2 class="h2">Latest Blog Post</h2>
+            <button  style="margin-left: 350px; margin-bottom: 30px;" class="btn btn-primary"><a style="color: aliceblue;" href="/create" >Create Article</a></button>
+          </div>
+          
+
+          <div class="blog-card-group">
+
+
+            <% if (articles.length>0) { %>
+              <% articles.forEach(article => { %>
+
+                
+                <div class="blog-card">
+
+                  
+                  <div class="blog-card-banner">
+                    <a href="/details/<%=article._id%>">
+                      <img  src="/images/<%=article.avatar%>""
+                      width="250" class="blog-banner-img">
+                    </a>
+                  </div>
+    
+                  <div class="blog-content-wrapper">
+    
+                    
+                    <h3>
+                      <a href="/details/<%=article._id%>" class="h3">
+                         <%=article.titre%>
+                      </a>
+                    </h3>
+    
+                    <p class="blog-text">
+                      <%=article.snippet%>
+                    </p>
+    
+                    <div class="wrapper-flex">
+    
+                      <div class="profile-wrapper">
+                        <img src="/images/author.png"  width="50">
+                      </div>
+    
+                      <div class="wrapper">
+                        <a href="#" class="h4">Elmehdi Arkhis</a>
+                        
+    
+                        <p class="text-sm">
+                          <time><ion-icon name="time-outline"></ion-icon>Created At : <%=article.createdAt%></time>                         
+                        </p>
+
+                        <div style="display: flex;">
+                          <button id="delete" data-doc="<%=article._id%>" style="border-radius: 30px; background: rgba(255, 0, 0, 0.281); color: rgb(0, 0, 0); height: 35px; width: 120px; margin-top: 20px;margin-right: 10px;">
+                            <a style="color:black;">DELETE</a>
+                          </button>
+  
+                          <button  style="border-radius: 30px; background: rgba(0, 0, 0, 0.281); color: rgb(255, 255, 255); height: 35px; width: 120px; margin-top: 20px;">
+                            <a style="color: white;" href="/edit/<%=article._id%>">EDIT</a>
+                          </button>
+                        </div>
+                        
+
+                      </div>
+    
+                    </div>
+
+
+    
+                  </div>
+    
+                </div>
+                
+
+
+
+
+              <% }) %>
+            <% } else { %>
+              <p>No Articles Found in the Data base</p>
+            <% } %>   
+
+
+
+            
+
+            
+
+          </div>
+
+
+        </div>
+
+
+
+        <!--
+          - ASIDE
+        -->
+
+        <div class="aside">
+
+
+
+          <div class="tags">
+
+            <h2 class="h2">Click to Search By Tags</h2>
+
+            <div class="wrapper">
+
+              <% if (articles.length>0) { %>
+                <% articles.forEach(article => { %>              
+                  <button class="hashtag"><a href="/<%=article.tag%>">#<%=article.tag%></a></button>
+                <% }) %>
+              <% } else { %>
+                <p>No Articles Tag was found</p>
+              <% } %>   
+              
+
+            </div>
+
+          </div>
+
+          
+
+          <div class="newsletter">
+
+            <h2 class="h2">Newsletter</h2>
+
+            <div class="wrapper">
+
+              <p>
+                Subscribe to our newsletter to be among the first to keep up with the latest updates.
+              </p>
+
+              <form action="/email" method="post">
+                <input type="email" name="email" placeholder="Email Address" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+
+
+  
+  <%- include('./partials/footer') %>
+
+
+
+  <script src="./assets/js/script.js"></script>
+
+  <!--ionicon link-->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+  <script>
+    const btnDelete= document.querySelector("#delete");
+    btnDelete.addEventListener("click",(e)=>{
+      fetch(`/details/${btnDelete.dataset.doc}`,{method:'DELETE'})
+      .then(result=> result.json() )
+      .then(data=> window.location.href = data.redirect)
+      .catch(error=> console.log(error))
+    })
+  </script>
+
+</body>
+
+</html>
